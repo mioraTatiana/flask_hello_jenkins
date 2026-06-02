@@ -1,5 +1,6 @@
-```groovy
+```groovy id="’wini234"
 pipeline {
+
  agent {
   kubernetes {
    label 'jenkins-agent-my-app'
@@ -7,6 +8,7 @@ pipeline {
    yaml """
 apiVersion: v1
 kind: Pod
+
 metadata:
  labels:
   component: ci
@@ -22,9 +24,14 @@ spec:
   }
  }
 
+ triggers {
+  pollSCM('* * * * *')
+ }
+
  stages {
 
   stage('Test python') {
+
    steps {
 
     container('python') {
@@ -38,9 +45,12 @@ spec:
      sh 'python test.py'
 
     }
+
    }
+
   }
 
  }
+
 }
 ```
