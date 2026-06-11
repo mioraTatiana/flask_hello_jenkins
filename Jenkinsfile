@@ -1,56 +1,50 @@
-```groovy id="’wini234"
 pipeline {
 
- agent {
-  kubernetes {
-   label 'jenkins-agent-my-app'
+    agent {
+        kubernetes {
+            label 'jenkins-agent-my-app'
 
-   yaml """
+            yaml """
 apiVersion: v1
 kind: Pod
-
 metadata:
- labels:
-  component: ci
+  labels:
+    component: ci
 
 spec:
- containers:
- - name: python
-   image: python:3.14
-   command:
-   - cat
-   tty: true
+  containers:
+  - name: python
+    image: python:3.14
+    command:
+    - cat
+    tty: true
 """
-  }
- }
+        }
+    }
 
- triggers {
-  pollSCM('* * * * *')
- }
+    triggers {
+        pollSCM('* * * * *')
+    }
 
- stages {
+    stages {
 
-  stage('Test python') {
+        stage('Test python') {
 
-   steps {
+            steps {
 
-    container('python') {
+                container('python') {
 
-     sh 'python --version'
+                    sh 'python --version'
+                    sh 'pip install --upgrade pip'
+                    sh 'pip install -r requirements.txt'
+                    sh 'python test.py'
 
-     sh 'pip install --upgrade pip'
+                }
 
-     sh 'pip install -r requirements.txt'
+            }
 
-     sh 'python test.py'
+        }
 
     }
 
-   }
-
-  }
-
- }
-
 }
-```
